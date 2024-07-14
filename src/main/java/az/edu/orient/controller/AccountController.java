@@ -2,7 +2,10 @@ package az.edu.orient.controller;
 
 import az.edu.orient.dto.AccountDto;
 import az.edu.orient.service.AccountService;
+import az.edu.orient.validation.AccountValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,9 +15,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
+    private final AccountValidator accountValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(accountValidator);
+    }
 
     @PostMapping
-    public AccountDto createAccount(@RequestBody AccountDto request) {
+    public AccountDto createAccount(@RequestBody @Valid AccountDto request) {
         return accountService.createAccount(request);
     }
 
@@ -35,7 +44,7 @@ public class AccountController {
 
     @PutMapping(path = "{id}")
     public AccountDto updateAccount(@PathVariable Long id, @RequestBody AccountDto request) {
-        return null;
+        return accountService.updateAccount(id,request);
     }
 
     @PatchMapping(path = "{id}/status")

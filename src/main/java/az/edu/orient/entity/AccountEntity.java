@@ -24,6 +24,7 @@ public class AccountEntity {
     private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private Status status;
+    private int userId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
