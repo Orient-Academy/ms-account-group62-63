@@ -13,7 +13,6 @@ public class ValidAccountNameValidator implements ConstraintValidator<ValidAccou
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-
         if(value.matches("\\d+")) {
             return false;
         }

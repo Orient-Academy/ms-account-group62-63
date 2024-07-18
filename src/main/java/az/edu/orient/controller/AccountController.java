@@ -5,6 +5,7 @@ import az.edu.orient.service.AccountService;
 import az.edu.orient.validation.AccountValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,13 @@ public class AccountController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(accountValidator);
+        if(binder.getTarget() != null && accountValidator.supports(binder.getTarget().getClass())){
+            binder.addValidators(accountValidator);
+        }
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AccountDto createAccount(@RequestBody @Valid AccountDto request) {
         return accountService.createAccount(request);
     }

@@ -35,7 +35,10 @@ public class AccountService {
 
 
     public AccountDto updateAccount(Long id, AccountDto request) {
-        AccountEntity accountEntity = accountRepository.findById(id).orElseThrow(()->new AccountNotFoundException("Account not found: " + id));
-        return null;
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(()->new AccountNotFoundException("Account not found: " + id));
+        AccountMapper.INSTANCE.updateAccount(request, accountEntity);
+        AccountEntity updated = accountRepository.save(accountEntity);
+        return AccountMapper.INSTANCE.toAccountDto(updated);
     }
 }
